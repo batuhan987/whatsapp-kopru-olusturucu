@@ -22,7 +22,7 @@ Web siteniz için saniyeler içinde profesyonel bir **WhatsApp Destek Paneli** o
 
 ## 🚀 Nasıl Kullanılır?
 
-1.  [**Buraya Tıklayarak Araca Gidin**](https://seninkullaniciadin.github.io/reponun-adi/) (GitHub Pages linkini buraya ekle!)
+1.  [**Buraya Tıklayarak Araca Gidin**](https://batuhan987.github.io/whatsapp-kopru-olusturucu/) 
 2.  Acente adınızı ve WhatsApp numaranızı girin.
 3.  İhtiyacınıza göre butonları ve mesajları özelleştirin.
 4.  **"Kodu Kopyala"** butonuna basın.
