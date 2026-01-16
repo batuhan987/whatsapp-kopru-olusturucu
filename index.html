@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Köprü Oluşturma Aracı V1 | Batuhan Bayatlı</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #075E54; --whatsapp: #25D366; --accent: #3498db; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
+        .container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        h2 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+
+        .button-row { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--whatsapp); position: relative; }
+        .remove-btn { position: absolute; top: 10px; right: 10px; color: #ff4d4d; cursor: pointer; border: none; background: none; }
+
+        .preview-box { background: #e5ddd5; border-radius: 15px; height: 550px; position: sticky; top: 20px; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; align-items: flex-end; }
+        
+        .code-output { grid-column: span 2; background: #272822; color: white; padding: 25px; border-radius: 10px; position: relative; margin-top: 20px; }
+        pre { white-space: pre-wrap; word-wrap: break-word; font-size: 12px; margin: 0; line-height: 1.5; color: #a6e22e; }
+        .copy-btn { position: absolute; top: 20px; right: 20px; background: var(--whatsapp); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        
+        .add-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 20px; }
+
+        .mock-menu { width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); overflow: hidden; margin-bottom: 15px; }
+        
+        
+        .my-signature { text-align: center; margin-top: 30px; grid-column: span 2; font-size: 14px; color: #666; }
+        .my-signature a { color: var(--accent); text-decoration: none; font-weight: bold; border-bottom: 1px solid transparent; transition: 0.3s; }
+        .my-signature a:hover { border-bottom: 1px solid var(--accent); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2><i class="fas fa-magic"></i> Köprü Ayarları</h2>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="input-group">
+                <label>Acente WhatsApp No (905...)</label>
+                <input type="text" id="mainPhone" value="905XXXXXXXXX" oninput="updateUI()">
+            </div>
+            <div class="input-group">
+                <label>Acente Adı</label>
+                <input type="text" id="brandName" value="Acente Adı" oninput="updateUI()">
+            </div>
+        </div>
+
+        <hr>
+        <h3>Menü Butonları</h3>
+        <div id="buttonContainer"></div>
+        <button class="add-btn" onclick="addButton()"><i class="fas fa-plus"></i> Yeni Seçenek Ekle</button>
+    </div>
+
+    <div class="preview-box">
+        <div id="mockMenu" class="mock-menu">
+            <div style="background:var(--primary); color:white; padding:12px; text-align:center; font-weight:bold;" id="mockTitle">Acente Adı</div>
+            <div id="mockItems" style="padding:10px;"></div>
+            <div style="padding: 5px; background: #f1f1f1; text-align: center; font-size: 9px; color: #999;">
+                Ücretsiz WhatsApp Köprüsü: <span style="color:#3498db">Batuhan Bayatlı</span>
+            </div>
+        </div>
+        <div style="width:60px; height:60px; background:var(--whatsapp); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:30px;">
+            <i class="fab fa-whatsapp"></i>
+        </div>
+    </div>
+
+    <div class="code-output">
+        <button class="copy-btn" onclick="copyCode()">Kodu Kopyala 📋</button>
+        <h2 style="color:white;"><i class="fas fa-code"></i> Kurulum Kodu</h2>
+        <p style="font-size:13px; color:#bbb;">Aşağıdaki kodu kopyalayıp sitenizin &lt;/body&gt; etiketinden hemen önce yapıştırın.</p>
+        <pre id="finalCode"></pre>
+    </div>
+
+    <div class="my-signature">
+        Bu araç <a href="https://www.linkedin.com/in/batuhanbayatlı/" target="_blank">Batuhan Bayatlı</a> tarafından acenteler için <strong>ücretsiz</strong> olarak geliştirilmiştir. ✨
+    </div>
+</div>
+
+<script>
+    let buttons = [
+        { title: 'Fiyat Teklifi Al', msg: 'Merhaba, kasko teklifi almak istiyorum.', type: 'wa' },
+        { title: 'Ofis Adresimiz', msg: 'Beşiktaş Meydanı, No:1, İstanbul', type: 'map' }
+    ];
+
+    function addButton() {
+        buttons.push({ title: 'Yeni Seçenek', msg: 'Mesajınız veya Adresiniz', type: 'wa' });
+        renderInputs();
+    }
+
+    function removeButton(index) {
+        buttons.splice(index, 1);
+        renderInputs();
+    }
+
+    function updateValue(index, field, value) {
+        buttons[index][field] = value;
+        updateUI();
+    }
+
+    function renderInputs() {
+        const container = document.getElementById('buttonContainer');
+        container.innerHTML = '';
+        buttons.forEach((btn, index) => {
+            container.innerHTML += `
+                <div class="button-row">
+                    <button class="remove-btn" onclick="removeButton(${index})"><i class="fas fa-trash"></i></button>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr 110px; gap:10px;">
+                        <div>
+                            <label>Buton İsmi</label>
+                            <input type="text" value="${btn.title}" oninput="updateValue(${index}, 'title', this.value)">
+                        </div>
+                        <div>
+                            <label>${btn.type === 'map' ? 'Açık Adres' : 'WhatsApp Mesajı'}</label>
+                            <input type="text" value="${btn.msg}" oninput="updateValue(${index}, 'msg', this.value)">
+                        </div>
+                        <div>
+                            <label>Tür</label>
+                            <select onchange="updateValue(${index}, 'type', this.value)">
+                                <option value="wa" ${btn.type === 'wa' ? 'selected' : ''}>WhatsApp</option>
+                                <option value="map" ${btn.type === 'map' ? 'selected' : ''}>Harita</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        updateUI();
+    }
+
+    function updateUI() {
+        const brand = document.getElementById('brandName').value;
+        const phone = document.getElementById('mainPhone').value;
+        document.getElementById('mockTitle').innerText = brand;
+        
+        const mockItems = document.getElementById('mockItems');
+        mockItems.innerHTML = '';
+        
+        let menuHTML = '';
+        buttons.forEach(btn => {
+            const link = btn.type === 'map' ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(btn.msg)}` : `https://wa.me/${phone}?text=${encodeURIComponent(btn.msg)}`;
+            const icon = btn.type === 'map' ? '📍' : '💬';
+            
+            mockItems.innerHTML += `<div style="padding:10px; background:#f0f2f5; margin-bottom:5px; border-radius:5px; font-size:12px;">${icon} ${btn.title}</div>`;
+            
+            menuHTML += `<a href="${link}" target="_blank" style="display:block; padding:12px; margin-bottom:8px; background:#f9f9f9; color:#333; text-decoration:none; border-radius:8px; border:1px solid #eee; font-size:14px;">${icon} ${btn.title}</a>`;
+        });
+
+        const finalSnippet = `
+<div id="wa-bridge-v2" style="position:fixed; bottom:20px; right:20px; z-index:999999; font-family:sans-serif;">
+    <div id="wa-card" style="display:none; width:280px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; margin-bottom:15px;">
+        <div style="background:#075E54; color:white; padding:15px; text-align:center;"><strong>${brand}</strong></div>
+        <div style="padding:10px;">${menuHTML}</div>
+        <div style="padding: 5px; background: #f1f1f1; text-align: center; font-size: 10px;">
+            <a href="https://www.linkedin.com/in/batuhanbayatlı/" target="_blank" style="color: #999; text-decoration: none;">Ücretsiz Acente Köprüsü: <b>Batuhan Bayatlı</b></a>
+        </div>
+    </div>
+    <div onclick="const m=document.getElementById('wa-card'); m.style.display=m.style.display==='none'?'block':'none'" 
+         style="width:60px; height:60px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); margin-left:auto;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30">
+    </div>
+</div>`;
+
+        document.getElementById('finalCode').innerText = finalSnippet;
+    }
+
+    function copyCode() {
+        navigator.clipboard.writeText(document.getElementById('finalCode').innerText);
+        alert("Kod kopyalandı! Artık sitenize yapıştırabilirsiniz. 🚀");
+    }
+
+    renderInputs();
+</script>
+
+</body>
+</html>
