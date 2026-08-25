@@ -3,180 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Köprü Oluşturma Aracı V1 | Batuhan Bayatlı</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>WhatsApp Köprü Oluşturucu // SigortamRahat & bGroup</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+   
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        surface: {
+                            base: '#f8fafc',
+                            card: '#ffffff',
+                            border: '#e2e8f0',
+                            hover: '#f1f5f9',
+                            muted: '#64748b',
+                            dark: '#0f172a'
+                        },
+                        wa: {
+                            primary: '#075E54',
+                            light: '#25D366',
+                            chatBg: '#ECE5DD'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        :root { --primary: #075E54; --whatsapp: #25D366; --accent: #3498db; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; color: #333; }
-        .container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 350px; gap: 20px; }
-        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        h2 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
-        
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 14px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-
-        .button-row { background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 4px solid var(--whatsapp); position: relative; }
-        .remove-btn { position: absolute; top: 10px; right: 10px; color: #ff4d4d; cursor: pointer; border: none; background: none; }
-
-        .preview-box { background: #e5ddd5; border-radius: 15px; height: 550px; position: sticky; top: 20px; display: flex; flex-direction: column; justify-content: flex-end; padding: 20px; align-items: flex-end; }
-        
-        .code-output { grid-column: span 2; background: #272822; color: white; padding: 25px; border-radius: 10px; position: relative; margin-top: 20px; }
-        pre { white-space: pre-wrap; word-wrap: break-word; font-size: 12px; margin: 0; line-height: 1.5; color: #a6e22e; }
-        .copy-btn { position: absolute; top: 20px; right: 20px; background: var(--whatsapp); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        
-        .add-btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-bottom: 20px; }
-
-        .mock-menu { width: 100%; background: white; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); overflow: hidden; margin-bottom: 15px; }
-        
-        
-        .my-signature { text-align: center; margin-top: 30px; grid-column: span 2; font-size: 14px; color: #666; }
-        .my-signature a { color: var(--accent); text-decoration: none; font-weight: bold; border-bottom: 1px solid transparent; transition: 0.3s; }
-        .my-signature a:hover { border-bottom: 1px solid var(--accent); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .chat-pattern {
+            background-color: #ECE5DD;
+            background-image: radial-gradient(#d1c7b7 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
     </style>
 </head>
-<body>
+<body class="bg-surface-base text-surface-dark min-h-screen flex flex-col antialiased selection:bg-wa-light selection:text-white">
 
-<div class="container">
-    <div class="card">
-        <h2><i class="fas fa-magic"></i> Köprü Ayarları</h2>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div class="input-group">
-                <label>Acente WhatsApp No (905...)</label>
-                <input type="text" id="mainPhone" value="905XXXXXXXXX" oninput="updateUI()">
+    <!-- HEADER -->
+    <header class="border-b border-surface-border bg-surface-card sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-wa-light flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+                    <i data-lucide="message-circle" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-extrabold text-base sm:text-lg tracking-tight text-surface-dark">WhatsApp <span class="text-wa-primary">Köprü Oluşturucu</span></span>
+                        <span class="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">bGroup // SigortamRahat</span>
+                    </div>
+                    <p class="text-[11px] text-surface-muted hidden sm:block">Acenteler &amp; İşletmeler İçin Özelleştirilebilir Akıllı İletişim Widget'ı</p>
+                </div>
             </div>
-            <div class="input-group">
-                <label>Acente Adı</label>
-                <input type="text" id="brandName" value="Acente Adı" oninput="updateUI()">
-            </div>
+
+            
+            <a href="https://www.linkedin.com/in/batuhanbayatlı/" target="_blank" class="flex items-center gap-2.5 pl-3 border-l border-surface-border hover:opacity-85 transition">
+                <img src="https://avatars.githubusercontent.com/u/255363609?v=4" class="w-9 h-9 rounded-full border border-surface-border shadow-sm object-cover" alt="Batuhan Bayatlı">
+                <div class="hidden lg:block text-left">
+                    <div class="text-xs font-extrabold text-surface-dark leading-tight">Batuhan Bayatlı</div>
+                    <div class="text-[10px] text-emerald-600 font-semibold leading-tight">InsurTech &amp; FinTech Specialist</div>
+                </div>
+            </a>
         </div>
+    </header>
 
-        <hr>
-        <h3>Menü Butonları</h3>
-        <div id="buttonContainer"></div>
-        <button class="add-btn" onclick="addButton()"><i class="fas fa-plus"></i> Yeni Seçenek Ekle</button>
-    </div>
+   
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-    <div class="preview-box">
-        <div id="mockMenu" class="mock-menu">
-            <div style="background:var(--primary); color:white; padding:12px; text-align:center; font-weight:bold;" id="mockTitle">Acente Adı</div>
-            <div id="mockItems" style="padding:10px;"></div>
-            <div style="padding: 5px; background: #f1f1f1; text-align: center; font-size: 9px; color: #999;">
-                Ücretsiz WhatsApp Köprüsü: <span style="color:#3498db">Batuhan Bayatlı</span>
-            </div>
-        </div>
-        <div style="width:60px; height:60px; background:var(--whatsapp); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-size:30px;">
-            <i class="fab fa-whatsapp"></i>
-        </div>
-    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-    <div class="code-output">
-        <button class="copy-btn" onclick="copyCode()">Kodu Kopyala 📋</button>
-        <h2 style="color:white;"><i class="fas fa-code"></i> Kurulum Kodu</h2>
-        <p style="font-size:13px; color:#bbb;">Aşağıdaki kodu kopyalayıp sitenizin &lt;/body&gt; etiketinden hemen önce yapıştırın.</p>
-        <pre id="finalCode"></pre>
-    </div>
+            
+            <div class="lg:col-span-7 space-y-6">
 
-    <div class="my-signature">
-        Bu araç <a href="https://www.linkedin.com/in/batuhanbayatlı/" target="_blank">Batuhan Bayatlı</a> tarafından acenteler için <strong>ücretsiz</strong> olarak geliştirilmiştir. ✨
-    </div>
-</div>
+                
+                <div class="bg-surface-card p-6 rounded-2xl border border-surface-border shadow-sm space-y-4">
+                    <h2 class="text-sm font-bold text-surface-dark flex items-center gap-2 border-b border-surface-border pb-3">
+                        <i data-lucide="sliders" class="w-4 h-4 text-emerald-600"></i> Acente &amp; İletişim Bilgileri
+                    </h2>
 
-<script>
-    let buttons = [
-        { title: 'Fiyat Teklifi Al', msg: 'Merhaba, kasko teklifi almak istiyorum.', type: 'wa' },
-        { title: 'Ofis Adresimiz', msg: 'Beşiktaş Meydanı, No:1, İstanbul', type: 'map' }
-    ];
-
-    function addButton() {
-        buttons.push({ title: 'Yeni Seçenek', msg: 'Mesajınız veya Adresiniz', type: 'wa' });
-        renderInputs();
-    }
-
-    function removeButton(index) {
-        buttons.splice(index, 1);
-        renderInputs();
-    }
-
-    function updateValue(index, field, value) {
-        buttons[index][field] = value;
-        updateUI();
-    }
-
-    function renderInputs() {
-        const container = document.getElementById('buttonContainer');
-        container.innerHTML = '';
-        buttons.forEach((btn, index) => {
-            container.innerHTML += `
-                <div class="button-row">
-                    <button class="remove-btn" onclick="removeButton(${index})"><i class="fas fa-trash"></i></button>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr 110px; gap:10px;">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
-                            <label>Buton İsmi</label>
-                            <input type="text" value="${btn.title}" oninput="updateValue(${index}, 'title', this.value)">
+                            <label class="block text-[11px] font-bold text-surface-muted mb-1">Acente / Şirket Adı</label>
+                            <input type="text" id="brandName" value="Güvenli Sigorta Acentesi" oninput="updateUI()" class="w-full px-3 py-2 bg-surface-base border border-surface-border rounded-xl text-xs font-semibold focus:border-emerald-500 focus:bg-white focus:outline-none transition">
                         </div>
                         <div>
-                            <label>${btn.type === 'map' ? 'Açık Adres' : 'WhatsApp Mesajı'}</label>
-                            <input type="text" value="${btn.msg}" oninput="updateValue(${index}, 'msg', this.value)">
-                        </div>
-                        <div>
-                            <label>Tür</label>
-                            <select onchange="updateValue(${index}, 'type', this.value)">
-                                <option value="wa" ${btn.type === 'wa' ? 'selected' : ''}>WhatsApp</option>
-                                <option value="map" ${btn.type === 'map' ? 'selected' : ''}>Harita</option>
-                            </select>
+                            <label class="block text-[11px] font-bold text-surface-muted mb-1">Acente WhatsApp Hattı (905...)</label>
+                            <input type="text" id="mainPhone" value="905550000000" oninput="updateUI()" class="w-full px-3 py-2 bg-surface-base border border-surface-border rounded-xl text-xs font-semibold focus:border-emerald-500 focus:bg-white focus:outline-none transition">
                         </div>
                     </div>
                 </div>
-            `;
-        });
-        updateUI();
-    }
 
-    function updateUI() {
-        const brand = document.getElementById('brandName').value;
-        const phone = document.getElementById('mainPhone').value;
-        document.getElementById('mockTitle').innerText = brand;
-        
-        const mockItems = document.getElementById('mockItems');
-        mockItems.innerHTML = '';
-        
-        let menuHTML = '';
-        buttons.forEach(btn => {
-            const link = btn.type === 'map' ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(btn.msg)}` : `https://wa.me/${phone}?text=${encodeURIComponent(btn.msg)}`;
-            const icon = btn.type === 'map' ? '📍' : '💬';
+                
+                <div class="bg-surface-card p-6 rounded-2xl border border-surface-border shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-surface-border pb-3">
+                        <h2 class="text-sm font-bold text-surface-dark flex items-center gap-2">
+                            <i data-lucide="layers" class="w-4 h-4 text-emerald-600"></i> Menü Butonları &amp; Yönlendirmeler
+                        </h2>
+                        <button onclick="addButton()" class="px-3 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold rounded-lg border border-emerald-200 transition flex items-center gap-1">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Yeni Buton Ekle
+                        </button>
+                    </div>
+
+                    <div id="buttonContainer" class="space-y-3">
+                        
+                    </div>
+                </div>
+
+                
+                <div class="bg-surface-card p-6 rounded-2xl border border-surface-border shadow-sm space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-sm font-bold text-surface-dark flex items-center gap-2">
+                            <i data-lucide="code" class="w-4 h-4 text-emerald-600"></i> Sitenize Eklenecek Kod
+                        </h2>
+                        <button onclick="copySnippet()" class="px-3.5 py-1.5 bg-surface-dark hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Kodu Kopyala
+                        </button>
+                    </div>
+                    <p class="text-xs text-surface-muted">
+                        Aşağıdaki hazır kodu kopyalayıp web sitenizin (WordPress, HTML vb.) <code class="font-mono text-[11px] bg-surface-base px-1.5 py-0.5 rounded border border-surface-border text-surface-dark">&lt;/body&gt;</code> etiketinin hemen öncesine yapıştırın.
+                    </p>
+                    <pre class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-[11px] font-mono overflow-x-auto max-h-48 border border-slate-800" id="finalCodeSnippet"></pre>
+                </div>
+
+            </div>
+
             
-            mockItems.innerHTML += `<div style="padding:10px; background:#f0f2f5; margin-bottom:5px; border-radius:5px; font-size:12px;">${icon} ${btn.title}</div>`;
-            
-            menuHTML += `<a href="${link}" target="_blank" style="display:block; padding:12px; margin-bottom:8px; background:#f9f9f9; color:#333; text-decoration:none; border-radius:8px; border:1px solid #eee; font-size:14px;">${icon} ${btn.title}</a>`;
+            <div class="lg:col-span-5 sticky top-24">
+                <div class="bg-surface-card p-5 rounded-2xl border border-surface-border shadow-sm space-y-4">
+                    <div class="flex items-center justify-between border-b border-surface-border pb-3">
+                        <span class="text-xs font-bold text-surface-dark flex items-center gap-1.5">
+                            <i data-lucide="smartphone" class="w-4 h-4 text-emerald-600"></i> Canlı Önizleme Simülatörü
+                        </span>
+                        <span class="text-[10px] font-bold text-surface-muted bg-surface-base px-2 py-0.5 rounded border border-surface-border">Widget Modu</span>
+                    </div>
+
+                   
+                    <div class="chat-pattern rounded-2xl h-[460px] p-4 flex flex-col justify-end items-end relative border border-slate-300 shadow-inner overflow-hidden">
+                        
+                        
+                        <div id="mockWidgetCard" class="w-full max-w-[280px] bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden mb-3 transition-all duration-300 transform scale-100">
+                            
+                            <div class="bg-wa-primary text-white p-3.5 text-center flex items-center justify-center gap-2">
+                                <div class="w-6 h-6 rounded-full bg-wa-light flex items-center justify-center text-white">
+                                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                                </div>
+                                <span class="font-bold text-xs" id="mockHeaderTitle">Acente Adı</span>
+                            </div>
+
+                            
+                            <div id="mockButtonList" class="p-3 space-y-2 text-xs">
+                                <!-- JS ile render edilir -->
+                            </div>
+
+                            
+                            <div class="bg-surface-base p-2 text-center text-[10px] text-surface-muted border-t border-surface-border">
+                                Destek: <span class="font-bold text-surface-dark">SigortamRahat Köprüsü</span>
+                            </div>
+                        </div>
+
+                       
+                        <button onclick="toggleMockCard()" class="w-14 h-14 bg-wa-light hover:bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/30 transition transform hover:scale-105 active:scale-95">
+                            <i data-lucide="message-circle" class="w-7 h-7"></i>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+   
+    <footer class="mt-auto border-t border-surface-border bg-surface-card py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <img src="https://avatars.githubusercontent.com/u/255363609?v=4" alt="Batuhan Bayatlı" class="w-11 h-11 rounded-full border border-surface-border shadow-sm">
+                <div>
+                    <div class="text-xs font-bold text-surface-dark">Batuhan Bayatlı</div>
+                    <div class="text-[11px] text-surface-muted font-medium">InsurTech &amp; FinTech Specialist | SEGEM | Japanese &amp; English</div>
+                </div>
+            </div>
+            <div class="text-center md:text-right">
+                <div class="text-xs font-extrabold text-surface-dark">SigortamRahat // bGroup Ecosystem</div>
+                <div class="text-[11px] text-surface-muted">Acenteler için açık kaynak ve ücretsiz iletişim köprüsü çözümü.</div>
+            </div>
+        </div>
+    </footer>
+
+   
+    <script>
+        let buttons = [
+            { title: 'Fiyat Teklifi Al', msg: 'Merhaba, güncel sigorta teklifi almak istiyorum.', type: 'wa' },
+            { title: 'Hasar Destek & Dosya Takibi', msg: 'Merhaba, hasar dosyam hakkında bilgi almak istiyorum.', type: 'wa' },
+            { title: 'Acente Ofisimiz (Harita)', msg: 'Büyükdere Cad. Levent, İstanbul', type: 'map' }
+        ];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderInputs();
+            lucide.createIcons();
         });
 
-        const finalSnippet = `
-<div id="wa-bridge-v2" style="position:fixed; bottom:20px; right:20px; z-index:999999; font-family:sans-serif;">
-    <div id="wa-card" style="display:none; width:280px; background:white; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.2); overflow:hidden; margin-bottom:15px;">
-        <div style="background:#075E54; color:white; padding:15px; text-align:center;"><strong>${brand}</strong></div>
-        <div style="padding:10px;">${menuHTML}</div>
-        <div style="padding: 5px; background: #f1f1f1; text-align: center; font-size: 10px;">
-            <a href="https://www.linkedin.com/in/batuhanbayatlı/" target="_blank" style="color: #999; text-decoration: none;">Ücretsiz Acente Köprüsü: <b>Batuhan Bayatlı</b></a>
+        function addButton() {
+            buttons.push({ title: 'Yeni Hizmet', msg: 'Merhaba, bilgi almak istiyorum.', type: 'wa' });
+            renderInputs();
+        }
+
+        function removeButton(index) {
+            if (buttons.length <= 1) {
+                alert("En az 1 buton kalmalıdır.");
+                return;
+            }
+            buttons.splice(index, 1);
+            renderInputs();
+        }
+
+        function updateValue(index, field, val) {
+            buttons[index][field] = val;
+            updateUI();
+        }
+
+        function renderInputs() {
+            const container = document.getElementById("buttonContainer");
+            container.innerHTML = "";
+
+            buttons.forEach((btn, index) => {
+                const row = document.createElement("div");
+                row.className = "bg-surface-base p-3.5 rounded-xl border border-surface-border relative space-y-3";
+                row.innerHTML = `
+                    <div class="flex items-center justify-between pb-2 border-b border-surface-border">
+                        <span class="text-[11px] font-bold text-surface-dark">Buton #${index + 1}</span>
+                        <button onclick="removeButton(${index})" class="text-rose-500 hover:text-rose-700 text-xs font-bold flex items-center gap-1">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Sil
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div class="sm:col-span-4">
+                            <label class="block text-[10px] font-bold text-surface-muted mb-1">Buton Başlığı</label>
+                            <input type="text" value="${escapeHtml(btn.title)}" oninput="updateValue(${index}, 'title', this.value)" class="w-full px-2.5 py-1.5 bg-white border border-surface-border rounded-lg text-xs font-semibold focus:border-emerald-500 focus:outline-none">
+                        </div>
+                        <div class="sm:col-span-5">
+                            <label class="block text-[10px] font-bold text-surface-muted mb-1">${btn.type === 'map' ? 'Harita Adresi' : 'Hazır Mesaj'}</label>
+                            <input type="text" value="${escapeHtml(btn.msg)}" oninput="updateValue(${index}, 'msg', this.value)" class="w-full px-2.5 py-1.5 bg-white border border-surface-border rounded-lg text-xs font-semibold focus:border-emerald-500 focus:outline-none">
+                        </div>
+                        <div class="sm:col-span-3">
+                            <label class="block text-[10px] font-bold text-surface-muted mb-1">Eylem Türü</label>
+                            <select onchange="updateValue(${index}, 'type', this.value)" class="w-full px-2.5 py-1.5 bg-white border border-surface-border rounded-lg text-xs font-semibold focus:border-emerald-500 focus:outline-none">
+                                <option value="wa" ${btn.type === 'wa' ? 'selected' : ''}>💬 WhatsApp</option>
+                                <option value="map" ${btn.type === 'map' ? 'selected' : ''}>📍 Harita/Konum</option>
+                            </select>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            updateUI();
+            lucide.createIcons();
+        }
+
+        function updateUI() {
+            const brand = document.getElementById("brandName").value || "Acente Adı";
+            const phone = document.getElementById("mainPhone").value || "905550000000";
+
+            document.getElementById("mockHeaderTitle").innerText = brand;
+
+            
+            const mockList = document.getElementById("mockButtonList");
+            mockList.innerHTML = "";
+
+            let generatedLinks = "";
+
+            buttons.forEach(btn => {
+                const isMap = (btn.type === 'map');
+                const link = isMap 
+                    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(btn.msg)}`
+                    : `https://wa.me/${phone}?text=${encodeURIComponent(btn.msg)}`;
+                
+                const iconSymbol = isMap ? "📍" : "💬";
+
+                
+                const item = document.createElement("a");
+                item.href = link;
+                item.target = "_blank";
+                item.className = "flex items-center gap-2 p-2 rounded-xl bg-surface-base hover:bg-surface-hover border border-surface-border font-bold text-surface-dark transition";
+                item.innerHTML = `<span>${iconSymbol}</span> <span>${escapeHtml(btn.title)}</span>`;
+                mockList.appendChild(item);
+
+                
+                generatedLinks += `
+        <a href="${link}" target="_blank" style="display:flex; align-items:center; gap:8px; padding:10px 12px; margin-bottom:8px; background:#f8fafc; color:#0f172a; text-decoration:none; border-radius:10px; border:1px solid #e2e8f0; font-size:13px; font-weight:600;">
+            <span>${iconSymbol}</span> <span>${escapeHtml(btn.title)}</span>
+        </a>`;
+            });
+
+            
+            const snippet = `
+<div id="wa-bridge-root" style="position:fixed; bottom:20px; right:20px; z-index:999999; font-family:system-ui,-apple-system,sans-serif;">
+    <div id="wa-bridge-box" style="display:none; width:280px; background:#ffffff; border-radius:16px; box-shadow:0 12px 30px rgba(0,0,0,0.18); border:1px solid #e2e8f0; overflow:hidden; margin-bottom:12px;">
+        <div style="background:#075E54; color:#ffffff; padding:14px; text-align:center; font-size:13px; font-weight:bold;">${escapeHtml(brand)}</div>
+        <div style="padding:12px;">${generatedLinks}
+        </div>
+        <div style="padding:6px; background:#f8fafc; text-align:center; font-size:10px; color:#94a3b8; border-top:1px solid #e2e8f0;">
+            <a href="https://www.linkedin.com/in/batuhanbayatlı/" target="_blank" style="color:#64748b; text-decoration:none; font-weight:600;">SigortamRahat Köprüsü</a>
         </div>
     </div>
-    <div onclick="const m=document.getElementById('wa-card'); m.style.display=m.style.display==='none'?'block':'none'" 
-         style="width:60px; height:60px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 4px 15px rgba(0,0,0,0.3); margin-left:auto;">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="30">
+    <div onclick="const b=document.getElementById('wa-bridge-box'); b.style.display=(b.style.display==='none'?'block':'none');" 
+         style="width:56px; height:56px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 6px 20px rgba(37,211,102,0.4); margin-left:auto; transition:transform 0.2s;" 
+         onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        <svg width="30" height="30" fill="#ffffff" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
     </div>
-</div>`;
+</div>
+`;
 
-        document.getElementById('finalCode').innerText = finalSnippet;
-    }
+            document.getElementById("finalCodeSnippet").innerText = snippet;
+        }
 
-    function copyCode() {
-        navigator.clipboard.writeText(document.getElementById('finalCode').innerText);
-        alert("Kod kopyalandı! Artık sitenize yapıştırabilirsiniz. 🚀");
-    }
+        function toggleMockCard() {
+            const card = document.getElementById("mockWidgetCard");
+            card.classList.toggle("hidden");
+        }
 
-    renderInputs();
-</script>
+        function copySnippet() {
+            const code = document.getElementById("finalCodeSnippet").innerText;
+            navigator.clipboard.writeText(code);
+            alert("✅ Kurulum kodu kopyalandı! Sitenizin </body> etiketinden hemen önce yapıştırabilirsiniz.");
+        }
 
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+    </script>
 </body>
 </html>
